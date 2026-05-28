@@ -1,0 +1,189 @@
+# Security Template — GitHub Actions Pipeline
+# Version: 1.2.1
+#
+# Policy:
+#   CRITICAL (Gitleaks, Semgrep ERROR) → block PR
+#   HIGH     (Semgrep WARNING, Bandit, pip-audit) → warn only, PR vẫn merge được
+#
+# Trigger: Pull Request only
+#
+# Optional — Slack alert khi CRITICAL:
+#   Settings → Secrets → SLACK_WEBHOOK_URL
+
+name: Security Scan
+
+on:
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  # ─── 1. Secret scan — Gitleaks (block PR) ───────────────────────────────────
+  gitleaks:
+    name: Secret Scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Copy .gitleaks.toml from submodule if missing
+        run: |
+          if [ ! -f ".gitleaks.toml" ] && [ -f "security/.gitleaks.toml" ]; then
+            cp security/.gitleaks.toml .gitleaks.toml
+            echo "→ Using .gitleaks.toml from submodule"
+          fi
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  # ─── 2. Semgrep — CRITICAL findings (block PR) ──────────────────────────────
+  semgrep-critical:
+    name: Semgrep CRITICAL
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep:1.163.0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run Semgrep — ERROR severity (blocks PR)
+        run: |
+          semgrep \
+            --config=security/.semgrep/rules/security.yml \
+            --severity=ERROR \
+            --error \
+            --metrics=off \
+            --timeout=10 \
+            --exclude=node_modules \
+            --exclude=.venv \
+            --exclude=venv \
+            --exclude=__pycache__ \
+            .
+
+  # ─── 3. Semgrep — HIGH findings (warn only) ─────────────────────────────────
+  semgrep-high:
+    name: Semgrep HIGH (warn only)
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep:1.163.0
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run Semgrep — WARNING severity (warn only)
+        run: |
+          semgrep \
+            --config=security/.semgrep/rules/security.yml \
+            --severity=WARNING \
+            --metrics=off \
+            --timeout=10 \
+            --exclude=node_modules \
+            --exclude=.venv \
+            --exclude=venv \
+            --exclude=__pycache__ \
+            . || true
+
+  # ─── 4. Bandit — Python SAST (warn only) ────────────────────────────────────
+  bandit:
+    name: Bandit Python SAST (warn only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for Python files
+        id: check_py
+        run: |
+          if find . -name "*.py" -not -path "./.git/*" | grep -q .; then
+            echo "has_python=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run Bandit
+        if: steps.check_py.outputs.has_python == 'true'
+        run: |
+          pip install "bandit[toml]" -q
+          bandit -r . -ll -c security/pyproject.toml || true
+
+  # ─── 5. pip-audit — Dependency CVE scan (warn only) ─────────────────────────
+  pip-audit:
+    name: pip-audit CVE Scan (warn only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for Python dependency files
+        id: check_deps
+        run: |
+          if find . -maxdepth 2 \( -name "requirements*.txt" -o -name "pyproject.toml" -o -name "Pipfile.lock" \) \
+              -not -path "./.git/*" -not -path "./security/*" | grep -q .; then
+            echo "has_deps=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run pip-audit
+        if: steps.check_deps.outputs.has_deps == 'true'
+        run: |
+          pip install pip-audit -q
+          SECURITY_SUBMODULE="security"
+          FOUND=0
+          for req in $(find . -maxdepth 2 -name "requirements*.txt" \
+                        -not -path "./${SECURITY_SUBMODULE}/*" \
+                        -not -path "./.git/*" 2>/dev/null | sort); do
+            echo "→ Auditing $req..."
+            pip-audit -r "$req" || true
+            FOUND=1
+          done
+          if [ "$FOUND" -eq 0 ] && [ -f "pyproject.toml" ]; then
+            echo "→ Auditing pyproject.toml..."
+            pip install . -q 2>/dev/null || true
+            pip-audit || true
+          fi
+
+  # ─── 6. Slack alert — CRITICAL only ─────────────────────────────────────────
+  # Chạy khi gitleaks hoặc semgrep-critical fail
+  # Yêu cầu: SLACK_WEBHOOK_URL trong Settings → Secrets and variables → Actions
+  slack-alert:
+    name: Slack Alert (CRITICAL)
+    runs-on: ubuntu-latest
+    needs: [gitleaks, semgrep-critical]
+    if: |
+      always() &&
+      (needs.gitleaks.result == 'failure' || needs.semgrep-critical.result == 'failure') &&
+      secrets.SLACK_WEBHOOK_URL != ''
+    steps:
+      - name: Send Slack alert
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          payload=$(printf '{
+            "blocks": [
+              {"type":"header","text":{"type":"plain_text","text":"🚨 CRITICAL Security Finding — PR bị block"}},
+              {"type":"section","fields":[
+                {"type":"mrkdwn","text":"*Repo:*\n`'"$REPO"'`"},
+                {"type":"mrkdwn","text":"*Author:*\n'"$PR_AUTHOR"'"}
+              ]},
+              {"type":"section","text":{"type":"mrkdwn","text":"*PR:* <'"$PR_URL"'|'"$PR_TITLE"'>"}},
+              {"type":"actions","elements":[{
+                "type":"button","text":{"type":"plain_text","text":"Xem Run →"},
+                "url":"'"$RUN_URL"'","style":"danger"
+              }]},
+              {"type":"context","elements":[{
+                "type":"mrkdwn","text":"Security Template v1.2.1 · Gitleaks hoặc Semgrep CRITICAL đã phát hiện lỗi"
+              }]}
+            ]
+          }')
+          curl -s -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"
+          echo "✅ Slack alert sent to #security"
