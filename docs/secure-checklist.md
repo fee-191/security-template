@@ -2,7 +2,7 @@
 
 > **Dùng cho:** Mọi PR/MR liên quan auth / withdrawal / payment / PII / KYC / wallet.
 > **Mức độ:** Mọi item là **BẮT BUỘC**, trừ khi note rõ "khi áp dụng".
-> **Reference:** Confluence Secure Coding Guide + `CLAUDE.md` ở root.
+> **Reference:** `CLAUDE.md` ở root repo + `docs/` cho rule chi tiết.
 
 ---
 
@@ -11,10 +11,10 @@
 - [ ] Đã chạy `pre-commit run --all-files` local — pass clean
 - [ ] Đã chạy `pytest` hoặc test suite tương đương — pass
 - [ ] Đã đọc `CLAUDE.md` cho rule set
-- [ ] Đã cross-check với Confluence Secure Coding Guide nếu đụng:
-  - Authentication, Authorization, MFA, API Auth
-  - PII, Sensitive Data, Encryption
-  - Mobile, Kubernetes, Workload Identity, Secrets
+- [ ] Đã cross-check với `docs/` nếu đụng:
+  - Authentication, Authorization, MFA, API Auth → `docs/auth.md`
+  - PII, Sensitive Data, Encryption → `docs/data-protection.md`, `docs/crypto.md`
+  - Mobile → `docs/mobile.md` · Kubernetes → `docs/infra.md`
 
 ---
 

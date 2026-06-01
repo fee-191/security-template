@@ -1,13 +1,27 @@
 # CEX Security Template
 
-![Security Scan](https://github.com/fee-191/security-template/actions/workflows/security.yml/badge.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Rules](https://img.shields.io/badge/semgrep%20rules-44-critical)
-![Tests](https://img.shields.io/badge/tests-80%2F80%20passing-brightgreen)
+[![Security Scan](https://github.com/fee-191/security-template/actions/workflows/security.yml/badge.svg)](https://github.com/fee-191/security-template/actions/workflows/security.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > **Security tooling for a Vietnamese crypto exchange** — custom Semgrep rules, CI/CD pipeline, and Claude Code AI skills to enforce security standards before code reaches production.
 >
-> Built for a real production environment handling user funds and subject to Vietnamese fintech regulations. Informed by real incidents: Mixin Network (2023, $200M), Upbit (2019, $50M), Bybit (2025, $1.5B).
+> Built for a real production environment handling user funds, subject to Vietnamese fintech regulations (NĐ 356/2025, ATTT Cấp 4). Rule set informed by post-mortems of Mixin Network ($200M, 2023), Upbit ($50M, 2019), and Bybit ($1.5B, 2025).
+
+---
+
+## Bối cảnh — Tại sao dự án này tồn tại
+
+Crypto exchange là môi trường có rủi ro cao nhất trong phần mềm: mọi lỗi logic trong balance, withdrawal, hay authentication đều có thể dẫn đến mất tài sản người dùng trực tiếp và không thể đảo ngược.
+
+| Incident | Năm | Thiệt hại | Root cause |
+|---|---|---|---|
+| **Bybit** | 2025 | $1.5B | Supply chain — thư viện JS bị compromised qua phishing |
+| **Mixin Network** | 2023 | $200M | Cloud DB compromise + JS code trên S3 bị thay |
+| **Upbit** | 2019 | $50M | Hot wallet drain |
+
+Template này phát hiện các pattern dẫn đến những incident trên — hardcoded secrets, eval injection, static nonce, float cho money, balance read without row lock — ngay tại thời điểm developer commit, không phải sau khi lên production.
+
+**Compliance:** Sàn crypto tại Việt Nam (Nghị quyết 05/2025/NQ-CP) phải tuân thủ ATTT Cấp độ 4 và NĐ 356/2025 về bảo vệ dữ liệu cá nhân. Template tích hợp các yêu cầu này trực tiếp vào coding workflow.
 
 ---
 
@@ -15,9 +29,9 @@
 
 | | |
 |---|---|
-| Semgrep rules | **44 rules tùy chỉnh** · 5 ngôn ngữ (Python, JS/TS, Kotlin, Swift, Java) |
-| Test suite | **80/80 PASSED** · 3 loại test: block / warn-only / false-positive |
-| CI/CD | **GitLab CI** (5 jobs) + **GitHub Actions** (workflow tương đương) |
+| Semgrep rules | Custom rules cho CEX · 5 ngôn ngữ (Python, JS/TS, Kotlin, Swift, Java) |
+| Test suite | 80 tests · 3 loại: block / warn-only / false-positive |
+| CI/CD | **GitLab CI** (5 jobs) + **GitHub Actions** |
 | AI integration | **Claude Code** skills, subagents, slash commands |
 | Compliance | NĐ 356/2025 (PII), ATTT Cấp độ 4, Luật PCRT 2022 |
 
@@ -123,24 +137,6 @@ Template cung cấp sẵn skills và agents cho Claude Code:
 ```
 
 Skill `cex-security-scan` (tại `.claude/skills/`) có thể dùng độc lập để review code trong conversation.
-
----
-
-## Context — Tại sao dự án này được xây dựng
-
-Crypto exchange là môi trường có rủi ro cao nhất trong phần mềm: mọi lỗi logic trong balance, withdrawal, hay authentication đều có thể dẫn đến mất tài sản người dùng trực tiếp và không thể đảo ngược.
-
-Ba incident lớn nhất là ví dụ điển hình:
-
-| Incident | Năm | Thiệt hại | Root cause |
-|---|---|---|---|
-| **Bybit** | 2025 | $1.5B | Supply chain — thư viện JS bị compromised qua phishing engineer |
-| **Mixin Network** | 2023 | $200M | Cloud DB compromise + JS code trên S3 bị thay |
-| **Upbit** | 2019 | $50M | Hot wallet drain |
-
-Template này được thiết kế để phát hiện các pattern dẫn đến những incident trên (hardcoded secrets, eval injection, static nonce, float cho money, missing row lock) ngay tại thời điểm developer gõ code — không phải sau khi lên production.
-
-**Compliance context:** Sàn giao dịch crypto tại Việt Nam (theo Nghị quyết 05/2025/NQ-CP) phải tuân thủ ATTT Cấp độ 4 và Nghị định 356/2025/NĐ-CP về bảo vệ dữ liệu cá nhân. Template tích hợp các requirement này trực tiếp vào workflow phát triển.
 
 ---
 

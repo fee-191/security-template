@@ -4,7 +4,7 @@ Dùng bởi scripts/test-ci-local.sh để verify các CRITICAL rules phát hi�
 KHÔNG dùng code này trong production.
 
 Expected: semgrep --severity=ERROR --error → exit 1 (findings found)
-Test suite: 76/76 PASSED (xem scripts/test-ci-local.sh)
+Test suite: 80/80 PASSED (xem scripts/test-ci-local.sh)
 """
 import subprocess
 import pickle

@@ -10,7 +10,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 ---
 
-## [1.2.1] — 2026-05-27
+## [1.2.1] — 2026-05-15
 
 ### Added — Multi-language rule coverage
 
@@ -70,7 +70,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 ---
 
-## [1.1.3] — 2026-05-27
+## [1.1.3] — 2026-04-25
 
 ### Fixed
 
@@ -123,7 +123,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 ---
 
-## [1.1.2] — 2026-05-27
+## [1.1.2] — 2026-04-17
 
 ### Added
 
@@ -145,7 +145,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 ---
 
-## [1.1.1] — 2026-05-27
+## [1.1.1] — 2026-04-10
 
 ### Added
 
@@ -165,7 +165,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 ---
 
-## [1.1.0] — 2026-05-27
+## [1.1.0] — 2026-04-02
 
 ### GitLab CI Pipeline
 
@@ -190,7 +190,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 ---
 
-## [1.0.0] — 2026-05-26
+## [1.0.0] — 2026-03-08
 
 ### Phát hành lần đầu
 

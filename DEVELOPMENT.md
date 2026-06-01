@@ -1,33 +1,33 @@
-# Development Guide
+# Hướng dẫn phát triển template
 
-> For contributors and maintainers of this template. Covers project structure, how to add rules, run tests, and release new versions.
+> Dành cho người maintain và đóng góp cho template này. Bao gồm cấu trúc project, cách thêm rule mới, chạy test, và quy trình release.
 
-## What This Project Is
+## Dự án là gì
 
-Security template for crypto exchange (CEX) development teams. Integrates via git submodule into any project and provides 4 automated security layers — from pre-commit to production CI/CD.
+Security template cho team phát triển sàn giao dịch crypto (CEX). Tích hợp vào project dưới dạng git submodule, cung cấp 4 lớp bảo vệ tự động từ pre-commit đến CI/CD production.
 
 **GitHub:** `https://github.com/fee-191/security-template`
 
 ---
 
-## Current State — v1.2.1
+## Trạng thái hiện tại — v1.2.1
 
-| Component | Status |
+| Thành phần | Trạng thái |
 |---|---|
-| Semgrep rules | 44 rules, 5 languages |
-| Test suite | **80/80 PASSED** |
+| Semgrep rules | Custom rules, 5 ngôn ngữ |
+| Test suite | 80/80 PASSED |
 | Languages | Python · JS/TS · Kotlin · Swift · Java |
 
 ---
 
-## Repo Structure
+## Cấu trúc repo
 
 ```
 security-template/
-├── .semgrep/rules/security.yml   # 44 rules — the core of this project
+├── .semgrep/rules/security.yml   # Custom Semgrep rules — core của template
 ├── scripts/
-│   ├── test-ci-local.sh          # Run: bash scripts/test-ci-local.sh
-│   └── setup-hooks.sh            # Setup for a new consumer project
+│   ├── test-ci-local.sh          # Chạy: bash scripts/test-ci-local.sh
+│   └── setup-hooks.sh            # Setup cho project consumer mới
 ├── tests/ci/
 │   ├── vuln_critical.py          # Python CRITICAL fixtures
 │   ├── vuln_high.py              # Python HIGH fixtures
@@ -39,96 +39,96 @@ security-template/
 │   ├── vuln_high_ios.swift       # Swift HIGH fixtures
 │   └── test_safe.py              # False positive check
 ├── docs/
-│   ├── guide.md                  # Full developer guide
-│   ├── deck.html                 # Presentation (open in browser)
-│   └── secure-checklist.md      # Pre-MR checklist
+│   ├── guide.md                  # Hướng dẫn đầy đủ cho developer
+│   ├── deck.html                 # Presentation (mở trực tiếp trên browser)
+│   └── secure-checklist.md      # Checklist 15 mục trước MR
 ├── .gitlab-ci.yml                # GitLab CI pipeline
 ├── .github/workflows/security.yml  # GitHub Actions equivalent
-├── CLAUDE.md                     # AI assistant rules binding
-└── CHANGELOG.md                  # Version history
+├── CLAUDE.md                     # Rules binding cho AI coding assistant
+└── CHANGELOG.md                  # Lịch sử phiên bản
 ```
 
 ---
 
-## Critical Technical Notes
+## Kiến thức kỹ thuật quan trọng
 
-### 1. Semgrep uses `re.fullmatch`, not `re.search`
+### 1. Semgrep dùng `re.fullmatch`, không phải `re.search`
 
-`metavariable-regex` applies `re.fullmatch` to the entire metavariable string.
+`metavariable-regex` apply `re.fullmatch` lên toàn bộ string của metavariable.
 
 ```yaml
-# WRONG — only matches if keyword is a suffix
+# SAI — chỉ match khi keyword là suffix
 regex: '(?i)(?:^|_)(secret|token)$'
 
-# CORRECT — fullmatch-compatible, matches anywhere in string
+# ĐÚNG — fullmatch-compatible, match bất kể prefix/suffix
 regex: '(?i)(?:^|.*_)(secret|token)(?:_.*|$)'
 ```
 
-### 2. Test infrastructure — 3 function types
+Lỗi này không hiển thị error — rule chỉ âm thầm không fire. Verify bằng `python3 -c "import re; print(re.fullmatch(pattern, string))"`.
+
+### 2. Test infrastructure — 3 loại hàm
 
 ```bash
-expect_blocks    "$FILE" "rule-id" "desc"  # Rule MUST fire in ERROR scan (CRITICAL)
-expect_warns_only "$FILE" "rule-id" "desc" # Rule MUST NOT block, only fire in WARNING scan (HIGH)
-expect_clean     "$FILE" "desc"            # 0 findings — false positive check
+expect_blocks    "$FILE" "rule-id" "desc"  # Rule PHẢI fire trong ERROR scan (CRITICAL)
+expect_warns_only "$FILE" "rule-id" "desc" # Rule KHÔNG block ERROR, chỉ fire WARNING scan (HIGH)
+expect_clean     "$FILE" "desc"            # 0 findings — kiểm tra false positive
 ```
 
 `expect_warns_only` = 2 passes (1 ERROR scan + 1 WARNING scan).
 
 ### 3. Severity mapping
 
-- `severity: ERROR` → CRITICAL → blocks commit and MR/PR
-- `severity: WARNING` → HIGH → warns only
+- `severity: ERROR` → CRITICAL → block commit và MR/PR
+- `severity: WARNING` → HIGH → warn only
 
 ---
 
-## Adding a New Rule
+## Thêm rule mới
 
-1. Write the pattern in `.semgrep/rules/security.yml`
+1. Viết pattern vào `.semgrep/rules/security.yml`
 2. Validate: `semgrep --validate --config=.semgrep/rules/security.yml`
-3. Add fixture to `tests/ci/vuln_critical_*.` or `vuln_high_*.*`
-4. Add `expect_blocks` or `expect_warns_only` to `scripts/test-ci-local.sh`
-5. If `severity: WARNING`: add rule ID to `should_be_warning` set in TEST 6
-6. Run `bash scripts/test-ci-local.sh` — must pass 100%
-7. Update CHANGELOG + VERSION + header comment in `security.yml`
+3. Thêm fixture vào `tests/ci/vuln_critical_*.` hoặc `vuln_high_*.*`
+4. Thêm `expect_blocks` hoặc `expect_warns_only` vào `scripts/test-ci-local.sh`
+5. Nếu `severity: WARNING`: thêm rule ID vào `should_be_warning` set trong TEST 6
+6. Chạy `bash scripts/test-ci-local.sh` — phải pass 100%
+7. Update CHANGELOG + VERSION + header comment trong `security.yml`
 
 ---
 
-## Running Tests
+## Chạy test
 
 ```bash
-# Install dependencies
 pip install semgrep
 
-# Run full test suite (must be 80/80 PASS before any push)
+# Full test suite — phải 100% trước khi push
 bash scripts/test-ci-local.sh
 ```
 
 ---
 
-## Local Dev Setup
+## Setup local
 
 ```bash
 git clone https://github.com/fee-191/security-template.git
 cd security-template
 
 pip install semgrep pre-commit
-bash scripts/test-ci-local.sh   # verify 80/80 PASS
+bash scripts/test-ci-local.sh
 ```
 
 ---
 
-## Release Checklist
+## Release checklist
 
-- [ ] All tests pass: `bash scripts/test-ci-local.sh`
-- [ ] `VERSION` file updated
-- [ ] `CHANGELOG.md` entry added with date and changes
-- [ ] Header comment in `security.yml` updated
-- [ ] Git tag created: `git tag -a v1.x.x -m "v1.x.x"`
-- [ ] Push tag: `git push origin --tags`
+- [ ] Test pass: `bash scripts/test-ci-local.sh`
+- [ ] Cập nhật `VERSION`
+- [ ] Thêm entry vào `CHANGELOG.md`
+- [ ] Cập nhật header comment trong `security.yml`
+- [ ] Tag: `git tag -a v1.x.x -m "v1.x.x"` → `git push origin --tags`
 
 ---
 
-## Versioning Convention
+## Versioning
 
-- **MINOR** — new rules or new language coverage
-- **PATCH** — bug fixes, doc updates, test improvements
+- **MINOR** — thêm rules mới hoặc thêm ngôn ngữ mới
+- **PATCH** — bug fix, docs, cải tiến test
