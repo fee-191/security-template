@@ -46,7 +46,7 @@ Template này phát hiện các pattern dẫn đến những incident trên — 
 | **3 — AI scan** | Claude Code `/cex-security` | Trước MR, thủ công | Khuyến nghị |
 | **4 — AI threat model** | Claude Code `/threat-model` | Trước khi code feature | Khuyến nghị |
 
-Lớp 1 và 2 **không thể bypass** bằng cách bỏ qua commit hook (CI vẫn chạy độc lập).
+Lớp 1 và 2 được enforce ở **hai điểm độc lập**: `--no-verify` bỏ qua được pre-commit nhưng CI/CD vẫn chạy và block MR nếu có CRITICAL finding.
 
 ---
 
