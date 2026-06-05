@@ -111,7 +111,7 @@ Kết quả: `✅ Setup hoàn tất — version 1.2.1`.
 # Thêm vào .gitlab-ci.yml của project
 include:
   - project: 'your-gitlab-group/security-template'
-    ref: 'v1.2.1'
+    ref: 'v1.2.1'  # thay bằng tag mới nhất
     file: '.gitlab-ci.yml'
 ```
 

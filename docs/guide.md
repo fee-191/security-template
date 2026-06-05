@@ -273,7 +273,7 @@ Thêm vào file `.gitlab-ci.yml` của project (tạo mới nếu chưa có):
 ```yaml
 include:
   - project: 'your-gitlab-group/security-template'
-    ref: 'v1.2.1'
+    ref: 'v1.2.1'  # thay bằng tag mới nhất — xem CHANGELOG.md
     file: '.gitlab-ci.yml'
 ```
 
@@ -285,7 +285,7 @@ variables:
 
 include:
   - project: 'your-gitlab-group/security-template'
-    ref: 'v1.2.1'
+    ref: 'v1.2.1'  # thay bằng tag mới nhất — xem CHANGELOG.md
     file: '.gitlab-ci.yml'
 ```
 
@@ -501,4 +501,4 @@ Runner chưa có quyền pull image từ Docker Hub (`zricethezav/gitleaks`, `se
 
 ---
 
-*Tài liệu này thuộc Security Template v1.2.1. Nằm trong `docs/guide.md` của template repo.*
+*Security Template · [`docs/guide.md`](guide.md) · xem [CHANGELOG](../CHANGELOG.md) để biết version hiện tại.*
