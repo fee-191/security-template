@@ -18,7 +18,7 @@
 #            TEST 10 (2 CRITICAL kotlin)  · TEST 11 (8 HIGH kotlin)
 #            TEST 12 (1 CRITICAL swift)   · TEST 13 (8 HIGH swift)
 #   Other:   TEST 4 (2 gitleaks) · TEST 5 (2 bandit) · TEST 6 (2 yaml) · TEST 7 (10 setup-hooks)
-# v1.2.1: +Gap2 (log-sensitive %s authorization) +Gap3 (balance-check helper fn) +Gap4 (README deploy token)
+# v1.2.1: +Gap1 (README deploy token) +Gap2 (log-sensitive %s authorization) +Gap3 (balance-check helper fn) +Gap4 (severity whitelist)
 # =============================================================================
 
 set -euo pipefail

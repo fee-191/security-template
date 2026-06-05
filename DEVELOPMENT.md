@@ -28,20 +28,22 @@ security-template/
 ├── scripts/
 │   ├── test-ci-local.sh          # Chạy: bash scripts/test-ci-local.sh
 │   └── setup-hooks.sh            # Setup cho project consumer mới
-├── tests/ci/
-│   ├── vuln_critical.py          # Python CRITICAL fixtures
-│   ├── vuln_high.py              # Python HIGH fixtures
-│   ├── vuln_critical_js.ts       # JS/TS CRITICAL fixtures
-│   ├── vuln_high_js.ts           # JS/TS HIGH fixtures
-│   ├── vuln_critical_android.kt  # Kotlin CRITICAL fixtures
-│   ├── vuln_high_android.kt      # Kotlin HIGH fixtures
-│   ├── vuln_critical_ios.swift   # Swift CRITICAL fixtures
-│   ├── vuln_high_ios.swift       # Swift HIGH fixtures
-│   └── test_safe.py              # False positive check
+├── tests/
+│   ├── ci/
+│   │   ├── vuln_critical.py          # Python CRITICAL fixtures
+│   │   ├── vuln_high.py              # Python HIGH fixtures
+│   │   ├── vuln_critical_js.ts       # JS/TS CRITICAL fixtures
+│   │   ├── vuln_high_js.ts           # JS/TS HIGH fixtures
+│   │   ├── vuln_critical_android.kt  # Kotlin CRITICAL fixtures
+│   │   ├── vuln_high_android.kt      # Kotlin HIGH fixtures
+│   │   ├── vuln_critical_ios.swift   # Swift CRITICAL fixtures
+│   │   └── vuln_high_ios.swift       # Swift HIGH fixtures
+│   └── test_safe.py                  # False positive check
 ├── docs/
 │   ├── guide.md                  # Hướng dẫn đầy đủ cho developer
 │   ├── deck.html                 # Presentation (mở trực tiếp trên browser)
-│   └── secure-checklist.md      # Checklist 15 mục trước MR
+│   ├── secure-checklist.md       # Checklist 15 mục trước MR
+│   └── auth.md · crypto.md · database.md · data-protection.md · infra.md · mobile.md · wallet.md · workflow.md
 ├── .gitlab-ci.yml                # GitLab CI pipeline
 ├── .github/workflows/security.yml  # GitHub Actions equivalent
 ├── CLAUDE.md                     # Rules binding cho AI coding assistant
@@ -87,7 +89,7 @@ expect_clean     "$FILE" "desc"            # 0 findings — kiểm tra false pos
 
 1. Viết pattern vào `.semgrep/rules/security.yml`
 2. Validate: `semgrep --validate --config=.semgrep/rules/security.yml`
-3. Thêm fixture vào `tests/ci/vuln_critical_*.` hoặc `vuln_high_*.*`
+3. Thêm fixture vào `tests/ci/vuln_critical_*.*` hoặc `vuln_high_*.*`
 4. Thêm `expect_blocks` hoặc `expect_warns_only` vào `scripts/test-ci-local.sh`
 5. Nếu `severity: WARNING`: thêm rule ID vào `should_be_warning` set trong TEST 6
 6. Chạy `bash scripts/test-ci-local.sh` — phải pass 100%
@@ -130,5 +132,6 @@ bash scripts/test-ci-local.sh
 
 ## Versioning
 
+- **MAJOR** — breaking change, cấu trúc config không tương thích ngược
 - **MINOR** — thêm rules mới hoặc thêm ngôn ngữ mới
 - **PATCH** — bug fix, docs, cải tiến test

@@ -1,5 +1,5 @@
 # Security Template — GitLab CI Pipeline
-# Version: 1.1.3
+# Version: 1.2.1
 #
 # ┌──────────────────────────────────────────────────────────────────────┐
 # │  Tích hợp vào project của bạn — thêm vào .gitlab-ci.yml:            │

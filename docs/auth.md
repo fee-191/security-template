@@ -83,6 +83,8 @@ payload = jwt.decode(
 ✅ **device_id trong JWT** phải match `device_id` trong request (GOV-01.2).
 ✅ **Exchange Partner callback:** xác minh mTLS client certificate (ACM PCA) — không tin tầng mạng.
 
+> *Sections 3–6 (Authorization, API Auth, Session Management, MFA) — xem `.security/steering/tech.md` và `docs/database.md`.*
+
 ### 7. Input Validation
 
 ✅ Server-side, 4 check: type, length, format, range.

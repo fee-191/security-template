@@ -62,7 +62,7 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 - **6 test fixture files mới:** `vuln_critical_js.ts`, `vuln_high_js.ts`, `vuln_critical_android.kt`, `vuln_high_android.kt`, `vuln_critical_ios.swift`, `vuln_high_ios.swift`
 - **6 test sections mới:** TEST 8–13 trong `test-ci-local.sh` (JS/TS CRITICAL, JS/TS HIGH, Android CRITICAL, Android HIGH, iOS CRITICAL, iOS HIGH)
-- **Tổng: 76/76 tests PASSED** (từ 44)
+- **Tổng: 80/80 tests PASSED** (từ 44)
 
 ### Added — Docs & assets
 
@@ -205,12 +205,12 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 - Bandit — Python security scan
 - Semgrep — 19 custom CEX rules (8 categories: auth, wallet, compliance, crypto, infra, injection, mobile, race-condition)
 
-**Claude Code skills (Lớp 2 & 3):**
+**Claude Code skills (Lớp 3 & 4):**
 - `/cex-security` — AI scan code thay đổi, trace L1-L4 data flow, xuất báo cáo VN+EN
 - `/threat-model` — AI phân tích mối đe doạ STRIDE, mitigation checklist
 
 **Context & steering:**
-- `CLAUDE.md` — 12 critical rules, anti-patterns, CEX architecture context
+- `CLAUDE.md` — 13 critical rules, anti-patterns, CEX architecture context
 - `.security/steering/` — 6 file: product, tech, compliance, api-design, code-style, structure
 - `docs/` — 8 file tài liệu: auth, crypto, data-protection, database, infra, mobile, wallet, workflow
 - `docs/secure-checklist.md` — 15-item MR checklist
@@ -230,9 +230,10 @@ Format: [Semantic Versioning](https://semver.org/) — `MAJOR.MINOR.PATCH`
 
 | Version | Nội dung | Dự kiến |
 |---|---|---|
-| **v1.1** | GitLab CI pipeline — 5 jobs, block/warn policy, include: remote ✅ | 2026-05-27 |
-| **v1.2** | MCP Jira: auto-tạo ticket từ findings có dedup theo fingerprint hash · Confluence doc pull | TBD |
-| **v1.3** | Multi-AI: Cursor, Codex, GitHub Copilot, Windsurf, Cline | TBD |
+| **v1.1** | GitLab CI pipeline — 5 jobs, block/warn policy ✅ | 2026-04-02 |
+| **v1.2** | Multi-language rules — JS/TS, Kotlin, Swift ✅ | 2026-05-15 |
+| **v1.3** | MCP Jira integration · FP benchmark trên production codebase · Go rules | TBD |
+| **v1.4** | Multi-AI: Cursor, GitHub Copilot, Windsurf · Windows native support | TBD |
 | **v1.4** | Windows native — OS detection → PowerShell / bash path | TBD |
 | **v2.0** | Confluence as source of truth — `docs/` tự pull từ Confluence theo template | TBD |
 | **v2.1** | Security metrics & trending dashboard (GitLab Pages) | TBD |

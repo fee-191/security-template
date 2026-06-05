@@ -98,7 +98,7 @@ Bốn lớp **bổ sung cho nhau**, không thay thế.
 | **Các AI tool khác** (Copilot, Cursor...) | ✅ | ✅ | 🔜 v1.x | 🔜 v1.x |
 | **Không dùng AI** | ✅ | ✅ | ❌ | ❌ |
 
-**v1.1 hỗ trợ chính thức Claude Code.** Lớp 1 và Lớp 2 hoạt động với mọi môi trường vì chạy ở tầng Git và GitLab CI, không phụ thuộc AI tool.
+**Từ v1.1, template hỗ trợ chính thức Claude Code.** Lớp 1 và Lớp 2 hoạt động với mọi môi trường vì chạy ở tầng Git và CI/CD, không phụ thuộc AI tool.
 
 ---
 
@@ -272,7 +272,7 @@ Thêm vào file `.gitlab-ci.yml` của project (tạo mới nếu chưa có):
 
 ```yaml
 include:
-  - project: 'it-sec/secure-template/security-template'
+  - project: 'your-gitlab-group/security-template'
     ref: 'v1.2.1'
     file: '.gitlab-ci.yml'
 ```
@@ -284,7 +284,7 @@ variables:
   SECURITY_SUBMODULE: "tên-thư-mục-submodule"
 
 include:
-  - project: 'it-sec/secure-template/security-template'
+  - project: 'your-gitlab-group/security-template'
     ref: 'v1.2.1'
     file: '.gitlab-ci.yml'
 ```
@@ -297,7 +297,7 @@ git commit -m "ci: add security template pipeline"
 git push
 ```
 
-Vào GitLab → MR → tab **Pipelines** → kiểm tra 6 jobs:
+Vào GitLab → MR → tab **Pipelines** → kiểm tra 5 jobs bắt buộc + 1 conditional:
 
 | Job | Trạng thái mong đợi |
 |---|---|

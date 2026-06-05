@@ -25,9 +25,9 @@
 │     cat security/docs/secure-checklist.md                    │
 │     → 15 hạng mục checklist                                  │
 ├─────────────────────────────────────────────────────────────┤
-│  6. Push → GitLab CI pipeline (v1.1)                         │
+│  6. Push → GitLab CI / GitHub Actions                        │
 │     Secret scan + SAST + Dependency scan                     │
-│     Fail CRITICAL/HIGH → block merge                         │
+│     CRITICAL → block merge · HIGH → warn only                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -54,7 +54,7 @@ Claude sẽ hỏi clarification nếu cần, rồi output threat model.
 ### 2. Code với Claude Code
 
 Claude Code tự đọc:
-- `CLAUDE.md` — router 12 quy tắc + bảng dẫn tới docs chi tiết
+- `CLAUDE.md` — router 13 quy tắc + bảng dẫn tới docs chi tiết
 - `docs/auth.md`, `docs/wallet.md`... — khi đụng domain tương ứng
 - `.security/steering/*.md` — context nghiệp vụ + kỹ thuật + pháp lý
 - `security-local.md` — nếu project có file này
@@ -100,14 +100,14 @@ cat security/docs/secure-checklist.md
 
 15 hạng mục — đi qua từng mục liên quan, đánh dấu ✓. Đính kèm checklist vào PR/MR description.
 
-### 6. GitLab CI pipeline (v1.1)
+### 6. CI/CD pipeline
 
-Phát hành cùng **v1.1**. Pipeline tự chạy khi push/MR:
+Pipeline tự chạy khi push/MR — hỗ trợ GitLab CI và GitHub Actions:
 - Secret Detection (Gitleaks)
-- SAST (Semgrep — custom CEX rules + community)
-- Dependency scan (Trivy)
+- SAST (Semgrep — custom CEX rules)
+- Dependency scan (pip-audit — Python packages)
 
-Finding CRITICAL hoặc HIGH → block merge tự động.
+Finding CRITICAL → block merge tự động. HIGH → warning, MR vẫn merge được.
 
 ## Quy tắc vàng
 

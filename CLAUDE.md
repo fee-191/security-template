@@ -8,7 +8,7 @@
 
 ## CONTEXT — Dự án CEX
 
-CEX là sàn giao dịch crypto (CEX) tại Việt Nam, partnership với một exchange đối tác lớn. Mọi code đụng đến **balance, withdrawal, order, authentication, KYC** đều có tác động tài chính trực tiếp đến người dùng.
+Đây là sàn giao dịch crypto (CEX) tại Việt Nam, partnership với một exchange đối tác lớn. Mọi code đụng đến **balance, withdrawal, order, authentication, KYC** đều có tác động tài chính trực tiếp đến người dùng.
 
 **Tuân thủ pháp lý:** Nghị định 356/2025/NĐ-CP (PII), Nghị quyết 05/2025/NQ-CP (thí điểm CEX), Luật Công nghiệp Công nghệ số 71/2025/QH15, tiêu chuẩn ATTT Cấp độ 4 (§9.1: log retention 24 tháng), Luật PCRT 2022 (KYC retention ≥ 5 năm).
 
@@ -22,8 +22,6 @@ CEX là sàn giao dịch crypto (CEX) tại Việt Nam, partnership với một 
 **Stack key:** Aurora MySQL, ElastiCache Redis, MSK, Kong API Gateway (L2), Istio mTLS STRICT, AWS Secrets Store CSI Driver (qua IRSA), GitLab CI → Argo CD GitOps.
 
 ---
-
-## CRITICAL RULES
 
 ## CRITICAL RULES — Tóm tắt
 
@@ -74,7 +72,7 @@ CEX là sàn giao dịch crypto (CEX) tại Việt Nam, partnership với một 
 | Lưu PII VN ngoài Z4 (VPC-VN) | Vi phạm Nghị định 356/2025 |
 | `region_name="ap-southeast-1"` cho KYC bucket | PII lưu sai vùng |
 | Istio PeerAuth PERMISSIVE mode trong prod | Plaintext between services |
-| `runAsRoot: true` trong Pod | Container escape risk |
+| `runAsNonRoot: false` hoặc `runAsUser: 0` trong Pod | Container escape risk |
 | `automountServiceAccountToken: true` mặc định | Compromise container = K8s API token |
 | Forward Kong L2 result thẳng vào withdrawal flow | Thiếu L3 verification |
 | `403` thay vì `404` cho resource user khác | Information leak (BOLA fingerprinting) |

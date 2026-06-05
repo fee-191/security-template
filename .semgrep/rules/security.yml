@@ -561,7 +561,7 @@ rules:
           - pattern-not: exec("...")
 
   # ============================================
-  # 19. JS/TS — COMMAND INJECTION
+  # 25. JS/TS — COMMAND INJECTION
   # ============================================
   - id: security-command-injection-js
     message: |
@@ -587,7 +587,7 @@ rules:
       - pattern: "spawnSync($CMD, $ARGS, {shell: true, ...})"
 
   # ============================================
-  # 20. JS/TS — EVAL / CODE INJECTION
+  # 26. JS/TS — EVAL / CODE INJECTION
   # ============================================
   - id: security-eval-injection-js
     message: |
@@ -607,7 +607,7 @@ rules:
       - pattern: new Function($A, $CODE)
 
   # ============================================
-  # 21. JS/TS — WEAK HASH
+  # 27. JS/TS — WEAK HASH
   # ============================================
   - id: security-weak-hash-js
     message: |
@@ -625,7 +625,7 @@ rules:
       - pattern: $C.createHash('SHA-1')
 
   # ============================================
-  # 22. JS/TS — SHA256 FOR PASSWORD
+  # 28. JS/TS — SHA256 FOR PASSWORD
   # ============================================
   - id: security-sha256-password-js
     message: |
@@ -646,7 +646,7 @@ rules:
               regex: '(?i)(?:^|.*_)(password|pwd|passwd|pass)(?:_.*|$)'
 
   # ============================================
-  # 23. JS/TS — AES-ECB MODE
+  # 29. JS/TS — AES-ECB MODE
   # ============================================
   - id: security-aes-ecb-js
     message: |
@@ -661,7 +661,7 @@ rules:
           regex: '(?i).*ecb.*'
 
   # ============================================
-  # 24. JS/TS — STATIC IV / ZERO NONCE
+  # 30. JS/TS — STATIC IV / ZERO NONCE
   # ============================================
   - id: security-static-iv-js
     message: |
@@ -687,7 +687,7 @@ rules:
               regex: '(?i)(?:^|.*_)(iv|nonce|counter)(?:_.*|$)'
 
   # ============================================
-  # 25. JS/TS — FLOAT FOR MONEY
+  # 31. JS/TS — FLOAT FOR MONEY
   # ============================================
   - id: security-float-for-money-js
     message: |
@@ -709,7 +709,7 @@ rules:
               regex: '(?i)(?:^|.*[_.A-Z])(amount|fee|balance|price|total|cost|payment|withdraw|deposit)(?:[_.A-Z].*|$)'
 
   # ============================================
-  # 26. ANDROID (KOTLIN) — WEAK HASH
+  # 32. ANDROID (KOTLIN) — WEAK HASH
   # ============================================
   - id: security-weak-hash-android
     message: |
@@ -723,7 +723,7 @@ rules:
       - pattern: MessageDigest.getInstance("SHA1")
 
   # ============================================
-  # 27. ANDROID (KOTLIN) — SQL INJECTION
+  # 33. ANDROID (KOTLIN) — SQL INJECTION
   # ============================================
   - id: security-sql-injection-android
     message: |
@@ -742,7 +742,7 @@ rules:
           - pattern-not: $DB.execSQL("...")
 
   # ============================================
-  # 28. ANDROID (KOTLIN) — LOG SENSITIVE DATA
+  # 34. ANDROID (KOTLIN) — LOG SENSITIVE DATA
   # ============================================
   - id: security-log-sensitive-android
     message: |
@@ -757,7 +757,7 @@ rules:
           regex: '(?i).*(password|passwd|token|secret|otp|pin|api.?key|cccd|biometric|private.?key|seed).*'
 
   # ============================================
-  # 29. ANDROID (KOTLIN) — STATIC IV / ZERO NONCE
+  # 35. ANDROID (KOTLIN) — STATIC IV / ZERO NONCE
   # ============================================
   - id: security-static-iv-android
     message: |
@@ -772,7 +772,7 @@ rules:
           regex: '(?i)(?:^|.*_)(iv|nonce|counter)(?:_.*|$)'
 
   # ============================================
-  # 30. ANDROID (KOTLIN) — INSECURE RANDOM
+  # 36. ANDROID (KOTLIN) — INSECURE RANDOM
   # ============================================
   - id: security-weak-random-android
     message: |
@@ -786,7 +786,7 @@ rules:
       - pattern: new Random()
 
   # ============================================
-  # 31. ANDROID (KOTLIN) — INSECURE SHAREDPREFS
+  # 37. ANDROID (KOTLIN) — INSECURE SHAREDPREFS
   # ============================================
   - id: security-insecure-prefs-android
     message: |
@@ -801,7 +801,7 @@ rules:
           regex: '(?i).*(token|secret|password|pwd|pin|otp|api.?key|private.?key|session|auth).*'
 
   # ============================================
-  # 32. iOS (SWIFT) — WEAK HASH
+  # 38. iOS (SWIFT) — WEAK HASH
   # ============================================
   - id: security-weak-hash-ios
     message: |
@@ -814,7 +814,7 @@ rules:
       - pattern: CC_SHA1(...)
 
   # ============================================
-  # 33. iOS (SWIFT) — INSECURE KEYCHAIN ACCESS
+  # 39. iOS (SWIFT) — INSECURE KEYCHAIN ACCESS
   # ============================================
   - id: security-insecure-keychain-ios
     message: |
@@ -825,7 +825,7 @@ rules:
     pattern: kSecAttrAccessibleAlways
 
   # ============================================
-  # 34. iOS (SWIFT) — LOG SENSITIVE DATA
+  # 40. iOS (SWIFT) — LOG SENSITIVE DATA
   # ============================================
   - id: security-log-sensitive-ios
     message: |
@@ -846,7 +846,7 @@ rules:
               regex: '(?i).*(password|passwd|token|secret|otp|pin|api.?key).*'
 
   # ============================================
-  # 35. iOS (SWIFT) — STATIC IV / ZERO DATA
+  # 41. iOS (SWIFT) — STATIC IV / ZERO DATA
   # ============================================
   - id: security-static-iv-ios
     message: |
@@ -861,16 +861,16 @@ rules:
           regex: '(?i)(?:^|.*_)(iv|nonce|counter)(?:_.*|$)'
 
   # ============================================
-  # 36. iOS (SWIFT) — INSECURE RANDOM
+  # 42. iOS (SWIFT) — INSECURE RANDOM
   # ============================================
   - id: security-weak-random-ios
     message: |
-      rand()/random() không cryptographically secure — không dùng cho OTP, token, nonce.
+      rand()/random()/drand48() không cryptographically secure — không dùng cho OTP, token, nonce.
       Dùng SecRandomCopyBytes(kSecRandomDefault, count, &buffer) cho mục đích bảo mật.
+      Note: arc4random() trên iOS 10+ là CSPRNG-safe nhưng SecRandomCopyBytes vẫn được khuyến nghị cho explicit security use.
     severity: WARNING
     languages: [swift]
     pattern-either:
       - pattern: rand()
       - pattern: random()
       - pattern: drand48()
-      - pattern: arc4random()
