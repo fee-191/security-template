@@ -5,8 +5,8 @@
 # │  Tích hợp vào project của bạn — thêm vào .gitlab-ci.yml:            │
 # │                                                                      │
 # │  include:                                                            │
-# │    - project: 'it-sec/secure-template/security-template'             │
-# │      ref: 'v1.1.3'                                                   │
+# │    - project: 'your-gitlab-group/security-template'                  │
+# │      ref: 'v1.2.1'                                                   │
 # │      file: '.gitlab-ci.yml'                                          │
 # │                                                                      │
 # │  Biến tuỳ chỉnh (GitLab → Settings → CI/CD → Variables):            │
@@ -196,7 +196,7 @@ security:slack-alert:
             },
             {
               type: "context",
-              elements: [{ type: "mrkdwn", text: "Security Template v1.1.3 · Gitleaks hoặc Semgrep CRITICAL đã phát hiện lỗi" }]
+              elements: [{ type: "mrkdwn", text: "Security Template v1.2.1 · Gitleaks hoặc Semgrep CRITICAL đã phát hiện lỗi" }]
             }
           ]
         }')
