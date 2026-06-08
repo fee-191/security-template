@@ -29,7 +29,7 @@ Template này phát hiện các pattern dẫn đến những incident trên — 
 
 | | |
 |---|---|
-| Semgrep rules | Custom rules cho CEX · 5 ngôn ngữ (Python, JS/TS, Kotlin, Swift, Java) |
+| Semgrep rules | **44 rules** (unique) · 5 ngôn ngữ · Python 23, JS/TS 15, Kotlin 8, Swift 7, Java 5 |
 | Test suite | 80 tests · 3 loại: block / warn-only / false-positive |
 | CI/CD | **GitLab CI** (5 jobs) + **GitHub Actions** |
 | AI integration | **Claude Code** skills, subagents, slash commands |
@@ -184,5 +184,7 @@ git push
 | [`CHANGELOG.md`](CHANGELOG.md) | Lịch sử phiên bản |
 
 ---
+
+**Liên quan:** [cex-incident-research](https://github.com/fee-191/cex-incident-research) — phân tích 31 vụ hack CEX là nguồn thiết kế các rules này · [lynxguard](https://github.com/fee-191/lynxguard) — SOC platform đồ án tốt nghiệp
 
 [GitHub Issues](https://github.com/fee-191/security-template/issues) · **fee-191 · 2026**
