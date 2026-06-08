@@ -135,3 +135,5 @@ bash scripts/test-ci-local.sh
 - **MAJOR** — breaking change, cấu trúc config không tương thích ngược
 - **MINOR** — thêm rules mới hoặc thêm ngôn ngữ mới
 - **PATCH** — bug fix, docs, cải tiến test
+
+<!-- last verified: 2026-06-08 -->
