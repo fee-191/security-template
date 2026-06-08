@@ -5,7 +5,7 @@
 
 > **Security tooling for a Vietnamese crypto exchange** — custom Semgrep rules, CI/CD pipeline, and Claude Code AI skills to enforce security standards before code reaches production.
 >
-> Built for a real production environment handling user funds, subject to Vietnamese fintech regulations (NĐ 356/2025, ATTT Cấp 4). Rule set informed by post-mortems of Mixin Network ($200M, 2023), Upbit ($50M, 2019), and Bybit ($1.5B, 2025).
+> Built for a real production environment handling user funds, subject to Vietnamese fintech regulations (NĐ 356/2025, ATTT Cấp độ 4). Rule set informed by post-mortems of Mixin Network ($200M, 2023), Upbit ($50M, 2019), and Bybit ($1.5B, 2025).
 
 ---
 
