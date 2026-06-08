@@ -29,8 +29,8 @@ Template này phát hiện các pattern dẫn đến những incident trên — 
 
 | | |
 |---|---|
-| Semgrep rules | **44 rules** (unique) · 5 ngôn ngữ · Python 23, JS/TS 15, Kotlin 8, Swift 7, Java 5 |
-| Test suite | 80 tests · 3 loại: block / warn-only / false-positive |
+| Semgrep rules | Custom rules · 5 ngôn ngữ (Python, JS/TS, Kotlin, Swift, Java) · actively maintained |
+| Test suite | 3 loại: block / warn-only / false-positive · CI verified |
 | CI/CD | **GitLab CI** (5 jobs) + **GitHub Actions** |
 | AI integration | **Claude Code** skills, subagents, slash commands |
 | Compliance | NĐ 356/2025 (PII), ATTT Cấp độ 4, Luật PCRT 2022 |
@@ -41,7 +41,7 @@ Template này phát hiện các pattern dẫn đến những incident trên — 
 
 | Lớp | Công cụ | Thời điểm | Mức độ |
 |---|---|---|---|
-| **1 — Pre-commit** | Gitleaks · Bandit · Semgrep (44 CEX rules) | Mỗi `git commit` (~5 giây) | Bắt buộc |
+| **1 — Pre-commit** | Gitleaks · Bandit · Semgrep (custom CEX rules) | Mỗi `git commit` (~5 giây) | Bắt buộc |
 | **2 — CI/CD** | Gitleaks · Semgrep · Bandit · pip-audit | Mỗi MR/PR | Bắt buộc |
 | **3 — AI scan** | Claude Code `/cex-security` | Trước MR, thủ công | Khuyến nghị |
 | **4 — AI threat model** | Claude Code `/threat-model` | Trước khi code feature | Khuyến nghị |
@@ -50,7 +50,7 @@ Lớp 1 và 2 được enforce ở **hai điểm độc lập**: `--no-verify` b
 
 ---
 
-## Rule coverage — 44 rules · 5 ngôn ngữ
+## Rule coverage — 5 ngôn ngữ
 
 | Ngôn ngữ | Số rules | Coverage |
 |---|---|---|
@@ -185,6 +185,6 @@ git push
 
 ---
 
-**Liên quan:** [cex-incident-research](https://github.com/fee-191/cex-incident-research) — phân tích 31 vụ hack CEX là nguồn thiết kế các rules này · [lynxguard](https://github.com/fee-191/lynxguard) — SOC platform đồ án tốt nghiệp
+**Liên quan:** [cex-incident-research](https://github.com/fee-191/cex-incident-research) — phân tích các vụ hack CEX là nguồn thiết kế các rules này · [lynxguard](https://github.com/fee-191/lynxguard) — SOC platform đồ án tốt nghiệp
 
 [GitHub Issues](https://github.com/fee-191/security-template/issues) · **fee-191 · 2026**
